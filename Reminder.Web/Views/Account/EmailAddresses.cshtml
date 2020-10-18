@@ -1,0 +1,12 @@
+﻿@model ReminderHero.Web.Controllers.EndpointsViewModel
+
+@{
+    ViewBag.Title = "Email Addresses";
+    Layout = "_AccountLayout.cshtml";
+    Model.ThingName = "Email Address";
+}
+    <div class="alert alert-success">
+          <h5>Create email reminders by sending an email to <a href="mailto:reminder@example.com">reminder@example.com</a></h5>
+    </div>
+@Html.Partial("_AddEndpoint")
+@Html.Partial("_EndpointsGrid")

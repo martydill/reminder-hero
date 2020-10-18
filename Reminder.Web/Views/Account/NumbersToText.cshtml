@@ -1,0 +1,21 @@
+﻿@model ReminderHero.Web.Controllers.NumbersToTextViewModel
+
+@{
+    Layout = "_AccountLayout.cshtml";
+    ViewBag.Title = "Text Message Numbers";
+}
+<div class="alert alert-success">
+    <h5>Don't see your country listed here? <a href="mailto:contact@example.com">Let us know!</a></h5>
+</div>
+@{
+    var grid = new WebGrid(source: Model.Numbers, rowsPerPage: 20, canPage: false, canSort: true, defaultSort: "Country", ajaxUpdateContainerId: "endpoints-grid");
+}
+
+<div id="endpoints-grid" class="span12">
+    @grid.GetHtml(
+    tableStyle: "table table-bordered table-striped",
+    columns: grid.Columns(
+        grid.Column("Country", "Country", canSort: true),
+       grid.Column("Number", "Number", canSort: true)
+        ))
+</div>

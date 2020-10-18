@@ -1,0 +1,48 @@
+﻿@model ReminderHero.Web.Controllers.ContactViewModel
+@{
+    ViewBag.Title = "Contact Us";
+}
+
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/signin.css?v=2")">
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="@Url.Content("~/Content/SecurityGuard/scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Content/SecurityGuard/scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Content/SecurityGuard/scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div id="box_login">
+    <div class="container">
+        <div class="span12 box_wrapper">
+            <div class="span12 box">
+                <div>
+                    <div class="head">
+                        <h4>Contact Us, or tweet us!</h4>
+                        <div style="margin:4px;">
+                        <a href="https://twitter.com/example-twitter-account" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @@example-twitter-account</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                            </div>
+                    </div>
+                    <div class="form">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.LabelFor(m => m.Name, new { @class = "legend-label" })
+                            @Html.TextBoxFor(m => m.Name, new { placeholder = "Name" })
+                            @Html.ValidationMessageFor(m => m.Name)
+
+                            @Html.LabelFor(m => m.Email, new { @class = "legend-label" })
+                            @Html.TextBoxFor(m => m.Email, new { placeholder = "Email" })
+                            @Html.ValidationMessageFor(m => m.Email)
+                            
+                            @Html.LabelFor(m => m.Message, new { @class = "legend-label" })
+                            @Html.TextAreaFor(m => m.Message, new { placeholder = "Message" })
+                            @Html.ValidationMessageFor(m => m.Message)
+
+                            @Html.ValidationSummary(true)
+
+                            <input type="submit" class="btn" value="Submit!" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

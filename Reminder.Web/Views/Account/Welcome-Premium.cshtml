@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Welcome to Reminder Hero! Here are a few quick tips to get you started";
+    Layout = "~/Views/Account/_AccountLayout.cshtml";
+}
+
+<h3>Configuring your email addresses and phone numbers</h3>
+<h4>We've already set up the email address you've registered with!</h4>
+<h4>If you want to create text message reminders, or email reminders from other email addresses, you need to register your  @Html.ActionLink("phone numbers", "PhoneNumbers") and @Html.ActionLink("email addresses", "EmailAddresses"). </h4>
+
+<h3>Creating Reminders</h3>
+<h4>To create email reminders, email your reminders to <a href="mailto:reminder@example.com">reminder@example.com</a>.</h4>
+<h4>To create text message reminders, text your reminders to one of our @Html.ActionLink("incoming numbers", "NumbersToText").</h4>
+
+<h3>Reminder Tips</h3>
+
+<h4>When sending us your reminders, make sure to include both a what and a when!</h4> 
+<h4>When specifying times, include AM or PM to ensure that Reminder Hero knows which one you want!</h4>
+<h4>You can create reminders for specific dates and times, or for time periods. Here are some examples:</h4>
+<ul>
+    <li>"Send Tim the reports in 20 min"</li>
+    <li>"Put out the garbage every Monday at 9 am"</li>
+    <li>"Tape the game on channel 135 tomorrow at 4:30pm"</li>
+</ul>
+
+<h4>Questions? <a href="/Account/Contact">Contact Us!</a></h4>

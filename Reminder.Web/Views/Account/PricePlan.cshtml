@@ -1,0 +1,163 @@
+﻿@using ReminderHero.Models
+@using ReminderHero.Web.ViewModel
+@model ReminderHero.Web.ViewModel.PricePlanViewModel
+@{
+    ViewBag.Title = "My Price Plan";
+    Layout = "_AccountLayout.cshtml";
+
+    var premiumPlanCostWithDiscount = PricePlan.PremiumPlanCost * Model.DiscountMultiplier;
+    var emailPlanCostWithDiscount = PricePlan.EmailPlanCost* Model.DiscountMultiplier;
+}
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<script src="@Url.Content("~/js/bootbox.min.js")"></script>
+
+<script>
+
+    $(document).ready(function () {
+        var planId = 0;
+
+        var clickHandler = function(e, planName, planCost) {
+            var src = e.srcElement;
+            var email = "@Model.Email";
+
+              // Open Checkout with further options
+              handler.open({
+                  image: '/Images/logo-128-white.png',
+                  name: 'Reminder Hero',
+                  description: planName,
+                  amount: planCost,
+                  email: email
+              });
+              e.preventDefault();
+        };
+
+        var premiumHandler = function(e) {
+            var planName = "Premium Plan ($@premiumPlanCostWithDiscount per month)";
+            var cost = (@premiumPlanCostWithDiscount) * 100;
+            planId = @PricePlan.PremiumPlanId;
+            clickHandler(e, planName, cost);
+        };
+
+        var emailHandler = function(e) {
+            var planName = "Email Plan ($@emailPlanCostWithDiscount per month)";
+            var cost = (@emailPlanCostWithDiscount) * 100;
+            planId = @PricePlan.EmailPlanId;
+            clickHandler(e, planName, cost);
+        };
+
+        var handler = StripeCheckout.configure({
+            key: "@AppSettingsViewModel.StripePubilcKey",
+            token: function (token, args) {
+                var id = @PricePlan.PremiumPlanId;
+                debugger
+                var $form = $("#payment-form");
+                $form.append($('<input>').attr({ type: 'hidden', name: 'StripeToken', value: token.id }))
+                     .append($('<input>').attr({ type: 'hidden', name: 'PricePlanId', value: planId}))
+                     .submit();
+            }
+        });
+  
+        var el = document.getElementById("submit-email-button");
+        if (el != null)
+        {
+            el.addEventListener('click', emailHandler);
+        }
+        var el2 = document.getElementById("submit-premium-button");
+        if (el2 != null)
+        {
+            el2.addEventListener('click', premiumHandler);
+        }
+    });
+
+</script>
+
+@if (Model.MonthlyCost == 0)
+{
+    <p>You are currently subscribed to the Free plan.</p>
+}
+else
+{
+    <p>You are currently subscribed to the @Model.CurrentPricePlanName Plan, which costs $@Model.MonthlyCost per month @Model.BetaDiscountAmount</p>
+}
+
+
+ <script type="text/javascript">
+     function ConfirmCancel() {
+         var message = "Are you sure you want to cancel your plan? This will stop all recurring reminders.\n\nYour credit card will be refunded the unused portion for this month.";
+         bootbox.confirm(message, function (result) {
+             if (result) {
+                 var $form = $("#payment-form");
+                 $form.append($('<input>').attr({ type: 'hidden', name: 'PricePlanId', value: @PricePlan.FreePlanId}))
+                     .submit();
+             }
+         });
+     }
+</script>
+
+
+@using (Html.BeginForm("SwitchToPricePlan", "Account", FormMethod.Post, new { id = "payment-form" }))
+{
+    <div style="text-align: left;">
+        @*   <input type="hidden" id="plan" name="Plan" />*@
+        @if (Model.CurrentPricePlanName != "Free")
+        {
+            <input type="button" class="btn priceplan-button" name="Plan" id="free-plan" value="Cancel my plan" onclick="ConfirmCancel()">
+        }
+
+        @if (Model.CurrentPricePlanName == "Free")
+        {
+            <h4>Upgrade to one of our paid plans for more features!</h4>
+           
+            <h3>Email Plan</h3>
+            <ul>
+                <li>-100 email reminders per month</li>
+                <li>-Add up to 5 email addresses to create reminders from</li>
+                <li>-Support for recurring reminders</li>
+            </ul>
+            <input type="submit" class="btn priceplan-button" value="Upgrade To The Email Plan - $@(PricePlan.EmailPlanCost* Model.DiscountMultiplier) Per Month @Model.BetaDiscountAmount" id="submit-email-button" />
+             
+            <h3>Premium Plan</h3>
+            <ul>
+                <li>-100 email reminders per month</li>
+                <li>-100 SMS reminders per month </li>
+                <li>-Add up to 5 email addresses and phone numbers to create reminders from</li>
+                <li>-Support for recurring reminders</li>
+            </ul>
+            <input type="submit" class="btn priceplan-button" value="Upgrade To The Premium Plan - $@(PricePlan.PremiumPlanCost * Model.DiscountMultiplier) Per Month @Model.BetaDiscountAmount" id="submit-premium-button" />
+        }
+        
+        @if (Model.CurrentPricePlanName == "Email")
+        {
+            <h3>Want to create SMS reminders? Upgrade to the Premium plan!</h3>
+           
+            <ul>
+                <li>-100 email reminders per month</li>
+                <li>-100 SMS reminders per month </li>
+                <li>-Add up to 5 email addresses and phone numbers to create reminders from</li>
+                <li>-Support for recurring reminders</li>
+            </ul>
+            <input type="submit" class="btn priceplan-button" value="Upgrade To The Premium Plan - $@(PricePlan.PremiumPlanCost * Model.DiscountMultiplier) Per Month @Model.BetaDiscountAmount" id="submit-premium-button" />
+        }
+
+    </div>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

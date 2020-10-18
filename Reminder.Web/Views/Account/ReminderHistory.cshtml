@@ -1,0 +1,34 @@
+﻿@model ReminderHero.Web.Controllers.ReminderHistoryViewModel 
+
+@{
+    Layout = "_AccountLayout.cshtml";
+}
+
+
+@{
+    ViewBag.Title = "Reminder History";
+    var grid = new WebGrid(source: Model.Reminders, canSort: true, defaultSort: "LocalDate", ajaxUpdateContainerId: "reminders-grid", canPage: true, rowsPerPage: 10, ajaxUpdateCallback: "reminders-grid");
+    if (Request.QueryString[grid.SortDirectionFieldName].IsEmpty())
+    {
+        grid.SortDirection = SortDirection.Descending;
+    }
+}
+
+
+@if (Model.Reminders.Any())
+{
+    <div id="reminders-grid" class="span12">
+        @grid.GetHtml(
+    tableStyle: "table table-bordered table-striped",
+    columns: grid.Columns(
+        grid.Column("Description", "Description", canSort: true),
+         grid.Column("LocalDate", "Reminder Date", canSort: true),
+         grid.Column("Recurrence", "Type", canSort: true),
+        grid.Column("Address", "Delivered To", canSort: true)
+        ))
+    </div>
+}
+else
+{
+    <h5>You have not yet created any reminders. Create one by emailing it to <a href="mailto:reminder@example.com">reminder@example.com</a></h5>
+}

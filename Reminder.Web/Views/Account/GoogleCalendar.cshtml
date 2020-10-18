@@ -1,0 +1,127 @@
+﻿@model ReminderHero.Web.Controllers.GoogleCalendarViewModel
+
+@{
+    Layout = "_AccountLayout.cshtml";
+    ViewBag.Title = "Google Calendar Settings";
+}
+
+<script src="@Url.Content("~/js/bootbox.min.js")"></script>
+<style>
+    .field-validation-error {
+        font-size: 14px;
+        line-height: 2em;
+    }
+
+    .checkbox {
+        margin-right: 6px !important;
+        margin-top: 1px !important;
+    }
+
+    label {
+        float: left;
+        margin-top: 5px;
+        margin-right: 12px;
+    }
+
+    select {
+        width: 90px;
+        float: left;
+        margin-right: 12px;
+    }
+
+    input {
+        width: 30px;
+        float: left;
+        margin-right: 12px;
+    }
+
+    .row {
+        margin-left: 0px;
+    }
+</style>
+
+@if (!Model.Connected)
+{
+    <div class="alert alert-success">
+        <h5>Connect to Google Calendar to send your Reminder Hero reminders to your Google Calendar</h5>
+    </div>
+
+    using (Html.BeginForm("ConnectToGoogle", "Google", FormMethod.Post))
+    {
+        <input type="submit" value="Connect to Google">
+    }
+
+}
+else
+{
+    <div class="alert alert-success">
+        <h5>Connected to Google Calendar</h5>
+    </div>
+
+    <h4>My Calendars</h4>
+    <hr>
+    <ul>
+        @foreach (var c in Model.Calendars)
+        {
+            <li>
+                <div class="row">
+                    <div class="span2">
+                        <label>
+                        @c.Summary
+                            </label>
+                    </div>
+                    <div class="span5">
+                        <label>
+                            @Html.CheckBox("checkbox-" + c.Id, c.SendEventsToMe, new {@class="checkbox",name=c.Id })
+                            Send reminders to this calendar
+                        </label>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+    
+    <input type="button" class="btn" value="Disconnect from Google Calendar" id="disconnectbutton" onclick="ConfirmCancel()">
+
+    <label id="saved-changes" style="display:none;">All Changes Saved</label>
+}
+
+<script type="text/javascript">
+
+    function ConfirmCancel() {
+        var message = "Are you sure you want to disconnect from Google Calendar?";
+        bootbox.confirm(message, function (result) {
+            if (result) {
+                $("#disconnectbutton").prop("disabled", "true");
+                $.ajax({
+                    url: '/Google/Disconnect',
+                    type: 'POST',
+                    dataType: "json",
+                    complete: function () {
+                        location.reload(true);
+                    }
+                });
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('.checkbox').change(function(e) {
+            var checked = $(e.target).is(':checked');
+            var id = $(e.target).attr("name").replace("checkbox-", "");
+            $.ajax({
+                url: '/Account/UpdateCalendar?calendarId=' + id + '&isChecked=' + checked,
+                data: { checked: checked},
+                type: 'POST',
+                dataType: "json",
+                complete: function () {
+                    $("#saved-changes").show();
+                    $("#saved-changes").fadeOut(2000);
+                }
+            });
+        });
+    });
+    </script>
+
+
+@Scripts.Render("~/bundles/jqueryval")

@@ -1,0 +1,44 @@
+﻿@model ReminderHero.Web.Controllers.EndpointsViewModel
+
+<script src="@Url.Content("~/js/bootbox.min.js")"></script>
+
+@{
+    var grid = new WebGrid(source: Model.Endpoints, rowsPerPage: 20, canPage: false, canSort: true, defaultSort: "Address", ajaxUpdateContainerId: "endpoints-grid");
+    string endpointTypeName = Model.EndpointType == ReminderHero.Models.EndpointType.Email ? "Email Address" : "Phone Number";
+    string endpointTypeNamePlural = Model.EndpointType == ReminderHero.Models.EndpointType.Email ? "Email Addresses" : "Phone Numbers";
+    string endpointSendType = Model.EndpointType == ReminderHero.Models.EndpointType.Email ? "email" : "text message";
+    
+    ViewBag.Title = "My " + endpointTypeNamePlural;
+}
+
+@if (Model.Endpoints.Any())
+{
+    <div id="endpoints-grid" class="span12">
+        @grid.GetHtml(
+    tableStyle: "table table-bordered table-striped",
+    columns: grid.Columns(
+        grid.Column("Address", endpointTypeName, canSort: true),
+        grid.Column(
+            "",
+            style: "remove-column",
+            format: item => @Html.Raw("<a href=\"#\" class=\"btn confirm\" onclick=\"ConfirmDelete(" + item.Id +",'" + item.Address + "')\" >Remove</a>"))
+        ))
+    </div>
+}
+else if(Model.CanAddMore)
+{
+    <h5>You haven't registered any @endpointTypeNamePlural.ToLower() with Reminder Hero yet</h5>
+    <h5>Registering your @endpointTypeName.ToLower() lets you send and receive reminders via @endpointSendType.</h5>
+}
+
+<script type="text/javascript">
+    function ConfirmDelete(rowId, address) {
+        bootbox.confirm("Are you sure you want to remove " + address + "? You won't be able to create reminders from it anymore.", function (result) {
+            if (result) {
+                var previous = $('#add-button').attr('action');
+                $('#add-button').attr('action', '/Account/DeleteEndpoint/' + rowId).submit();
+                $('#add-button').attr('action', previous);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,119 @@
+﻿@using System.Drawing.Printing
+@model ReminderHero.Web.Controllers.ReminderSettingsViewModel
+
+@{
+    Layout = "_AccountLayout.cshtml";
+    ViewBag.Title = "Reminder Settings";
+}
+
+<style>
+    .field-validation-error {
+        font-size: 14px;
+        line-height: 2em;
+    }
+     .checkbox {
+         margin-right: 6px !important;
+         margin-top: 1px !important;
+     }
+
+    label {
+        float: left;
+        margin-top: 5px;
+        margin-right: 12px;
+    }
+
+    select {
+        width: 90px;
+        float: left;
+        margin-right: 12px;
+    }
+
+    input {
+        width: 30px;
+        float: left;
+        margin-right: 12px;
+    }
+
+    .row {
+        margin-left: 0px;
+    }
+</style>
+<div class="alert alert-success">
+    <h5>Note: Changes to reminder settings affect both future reminders and currently outstanding reminders</h5>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <label>
+             @Html.CheckBoxFor(c => c.Reminder1Enabled, new { @class = "checkbox" })
+            Remind me
+        </label>
+
+        @Html.TextBoxFor(m => m.Reminder1Number)
+
+        @Html.DropDownListFor(m => m.Reminder1Period, Model.Periods)
+
+        <label>before the due date</label>
+        
+        @Html.ValidationMessageFor(m => m.Reminder1Number)
+    </div>
+
+    <div class="row">
+        <label>
+            @Html.CheckBoxFor(c => c.Reminder2Enabled, new { @class = "checkbox" })
+            Remind me
+        </label>
+
+        @Html.TextBoxFor(m => m.Reminder2Number)
+
+        @Html.DropDownListFor(m => m.Reminder2Period, Model.Periods)
+
+        <label>before the due date</label>
+        @Html.ValidationMessageFor(m => m.Reminder2Number)
+    </div>
+
+    <div class="row">
+        <label>
+            @Html.CheckBoxFor(c => c.Reminder3Enabled, new { @class = "checkbox" })
+            Remind me
+        </label>
+
+        @Html.TextBoxFor(m => m.Reminder3Number)
+
+        @Html.DropDownListFor(m => m.Reminder3Period, Model.Periods)
+
+        <label>before the due date</label>
+        @Html.ValidationMessageFor(m => m.Reminder3Number)
+    </div>
+
+    <div class="row">
+        <label>
+            @Html.CheckBoxFor(c => c.Reminder4Enabled, new { @class = "checkbox" })
+            Remind me
+        </label>
+
+        @Html.TextBoxFor(m => m.Reminder4Number)
+
+        @Html.DropDownListFor(m => m.Reminder4Period, Model.Periods)
+
+        <label>before the due date</label>
+        @Html.ValidationMessageFor(m => m.Reminder4Number)
+    </div>
+
+        @Html.ValidationSummary(true) 
+    
+    <input type="submit" value="Save Changes" class="btn btn-default">
+    
+if (Model.IsSave)
+{
+    <label id="saved-changes">All Changes Saved</label>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#saved-changes").fadeOut(2000);
+        });
+    </script>
+}
+}
+
+@Scripts.Render("~/bundles/jqueryval")

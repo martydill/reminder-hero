@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Email and Text Message " + ViewBag.Header;
+}
+
+<div class="full-width-features feature-1 what-page" name="feature-set">
+    <div>
+        <div class="row-fluid">
+            <h1>@ViewBag.Header</h1>
+            <h2>@ViewBag.TagLine</h2>
+            @RenderBody()
+
+            <div class="header-box">
+                @foreach (string reminder in ViewBag.Reminders)
+                { 
+                    <h4>"@reminder"</h4>     
+                }
+            </div>
+        </div>
+        
+        
+        <div class="row-fluid landing-page centered" style="height: 400px; margin-top: 30px">
+            <h2>Important dates? Critical times? Reminders on-the-go?
+                <br class="hidden-phone" />
+                No matter what you need, Reminder Hero can do it all.</h2>
+
+            <div class="top-buttons">
+                <div>
+                    <a href="/Account/Register" title="Sign up for Reminder Hero">
+                        <input type="submit" value="Sign Up!" />
+                    </a>
+                </div>
+                  <div>
+                    <a href="/what-can-reminder-hero-do" title="Learn more about Reminder Hero">
+                        <input type="submit" value="Learn More!" />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer">
+    <div class="container">
+        <div class="copyright">
+            <p>
+                Created By <a href="http://code-ninja.org">Marty</a>. Copyright 2013.<br>
+            </p>
+            <p>
+                @Html.ActionLink("Terms Of Service", "TermsOfService", "Home") | @Html.ActionLink("Privacy Policy", "PrivacyPolicy", "Home")
+            </p>
+        </div>
+    </div>
+</div>

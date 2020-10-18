@@ -1,0 +1,33 @@
+﻿@model ReminderHero.Web.ViewModel.BillingHistoryViewModel
+
+@{
+    ViewBag.Title = "Billing History";
+    Layout ="_AccountLayout.cshtml";
+
+    var grid = new WebGrid(source: Model.Items, rowsPerPage: 10, canPage: true, canSort: true, defaultSort: "Date", ajaxUpdateContainerId: "billing-history-grid", ajaxUpdateCallback:"billing-history-grid");
+    if (Request.QueryString[grid.SortDirectionFieldName].IsEmpty())
+    {
+        grid.SortDirection = SortDirection.Descending;
+    }
+}
+
+@if (Model.Items.Any())
+{
+    <div class="alert alert-success">If you recently changed or canceled your subscription, it may take a few minutes for the changes to show up here.</div>
+    
+    <div id="billing-history-grid" class="span12">
+        @grid.GetHtml(
+            tableStyle: "table table-hover table-bordered table-striped",
+            columns: grid.Columns(
+                grid.Column("Date", "Date", canSort:true),
+                grid.Column("Amount", "Amount", canSort:true, format: (item) => string.Format("{0:C}", item.Amount)),
+                grid.Column("Description", "Description", canSort:true)
+                ))
+    </div>
+
+}
+else
+{
+    <h3>You have no billing history yet.</h3>
+    <h5>Note: If you recently changed or canceled your subscription, it may take a few minutes for the changes to show up here.</h5>
+}

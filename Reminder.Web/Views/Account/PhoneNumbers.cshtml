@@ -1,0 +1,13 @@
+﻿@model ReminderHero.Web.Controllers.EndpointsViewModel
+
+@{
+    Layout = "_AccountLayout.cshtml";
+    ViewBag.Title = "Phone Numbers";
+    Model.ThingName = "Phone Number";
+}
+    <div class="alert alert-success">
+          <h5>Create SMS reminders by sending a text message to @Html.ActionLink("one of our incoming numbers", "NumbersToText").</h5>
+           <h5>Please add your full mobile number, including country code, using the form below.</h5>
+    </div>
+@Html.Partial("_AddEndpoint")
+@Html.Partial("_EndpointsGrid")

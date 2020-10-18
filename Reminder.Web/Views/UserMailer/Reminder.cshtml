@@ -1,0 +1,17 @@
+@using ReminderHero.Models
+@if (ViewBag.HandleType == HandleReminderType.Real)
+{
+    <p>Here's a quick reminder from Reminder Hero!</p>
+    <p>@ViewBag.Reminder.Description!</p>
+}
+else
+{
+   <p>
+   @ViewBag.Reminder.Description<text> in </text>@ViewBag.Reminder.GetTimeFor(ViewBag.HandleType)
+   </p>
+}
+---
+<p>Did this reminder arrive at the wrong time, or contain the wrong information? Let us know!</p>
+<p>Cheers,<br />
+Reminder Hero
+</p>

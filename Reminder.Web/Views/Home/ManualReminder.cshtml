@@ -1,0 +1,29 @@
+﻿@model dynamic
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>title</title>
+    </head>
+    <body>
+        <div>
+            <form action="/Home/ManualReminder" method="post">
+                <label>Subject</label>
+                <input type="text" name="subject" />
+
+                <label>Email    </label>
+                <input type="text" name="email" />
+
+                <label>Reminder</label>
+                <input type="text" name="reminder" style="width:400px;"/>
+
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    </body>
+</html>

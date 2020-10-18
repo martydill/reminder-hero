@@ -1,0 +1,58 @@
+﻿@using ReminderHero.Models
+@model ReminderHero.Web.Controllers.RemindersViewModel 
+
+<script src="@Url.Content("~/js/bootbox.min.js")"></script>
+@{
+    Layout = "_AccountLayout.cshtml";
+    ViewBag.Title = "Upcoming Reminders";
+    var grid = new WebGrid(source: Model.Reminders, canSort: true, defaultSort: "LocalCreatedDate", ajaxUpdateContainerId: "reminders-grid", canPage: true, rowsPerPage: 10, ajaxUpdateCallback: "reminders-grid");
+    if (Request.QueryString[grid.SortDirectionFieldName].IsEmpty())
+    {
+        grid.SortDirection = SortDirection.Descending;
+    }
+}
+
+@if (Model.Reminders.Any())
+{
+    <div class="alert alert-success">
+          <h5>Create reminders by sending an email to <a href="mailto:reminder@example.com">reminder@example.com</a>, or by sending a text message to @Html.ActionLink("one of our incoming numbers", "NumbersToText").</h5>
+    </div>
+    <div id="reminders-grid" class="span12">
+        @grid.GetHtml(
+    tableStyle: "table table-bordered table-striped",
+    columns: grid.Columns(
+        grid.Column("Description", "Description", canSort: true),
+        grid.Column("Email", "For", canSort:true),
+        grid.Column("LocalDate", "Reminder Date", canSort: true),
+         grid.Column("RecurrenceAsFriendlyString", "Type", canSort: true),
+        grid.Column("LocalCreatedDate", "Created On", canSort: true),
+        grid.Column(
+            "",
+            style: "remove-column",
+            format: item => @Html.Raw("<a href=\"#\" class=\"btn btn-default confirm\" onclick=\"ConfirmDelete(" + item.Id + "," + (item.Recurrence != Recurrence.Once).ToString().ToLower() + ")\" >Cancel</a>"))
+        ))
+    </div>
+}
+else
+{
+    <div class="alert alert-success">
+        <h5>You don't have any upcoming reminders. Create one by emailing it to <a href="mailto:reminder@example.com">reminder@example.com</a>, or by sending a text message to @Html.ActionLink("one of our incoming numbers", "NumbersToText").</h5>
+    </div>
+}
+
+<form action="/Account/DeleteReminder" method="post" id="reminder-delete" />
+
+ <script type="text/javascript">
+    function ConfirmDelete(rowId, isRecurring) {
+
+        var message = "Are you sure you want to cancel this " + (isRecurring == true ? "set of reminders?" : "reminder?");
+
+        bootbox.confirm(message, function (result) {
+            if (result) {
+                var previous = $('#reminder-delete').attr('action');
+                $('#reminder-delete').attr('action', '/Account/DeleteReminder/' + rowId).submit();
+                $('#reminder-delete').attr('action', previous);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,136 @@
+﻿@using StackExchange.Profiling
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title | Reminder Hero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+       <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link rel="shortcut icon" href="/favicon.ico?v=2">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/AdminSite2.css?v=2")">
+@*  <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/animate.css")">*@
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link href="//fonts.googleapis.com/css?family=Arvo" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet" type="text/css">
+@*    <script src="../../Scripts/jquery-1.7.2.min.js"></script>*@
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @if (ViewBag.MetaDescription != null)
+    {
+        <meta name="description" content="@ViewBag.MetaDescription">
+    }
+    else
+    {
+        <meta name="description" content="Reminders, email reminders, text message reminders, SMS reminders by Reminder Hero">
+    }
+    <meta name="author" content="Marty">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+  @*  @Html.GoogleAnalytics()*@
+</head>
+
+<body>
+
+    <div id="holder">
+        @{ 
+            var currentController = ViewContext.RouteData.Values["controller"] as string ?? "Home";
+            var currentAction = ViewContext.RouteData.Values["action"] as string ?? "Index";
+            var currentPage = (currentController + "-" + currentAction).ToLower();
+        }
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    @*<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>*@
+                    <a href="/"><img src="/images/logo-40-white.png" width="40" height="40" style="float: left; border-radius: 4px; margin-top: 6px;" alt="Reminder Hero's Website Logo"></a>
+                    <a class="brand scroller header-main" data-section="body" href="/">
+                        <b><h1>Reminder Hero</h1></b>
+                    </a>
+                    <div class="top-nav">
+                        <ul class="nav pull-right">
+                            @if (Request.IsAuthenticated)
+                            {
+                                <li  class="@(currentPage != "account-login" && currentPage.StartsWith("account-") ? "active" : null)">
+                                    @Html.ActionLink("My Account", "Reminders", "Account")
+                                </li>
+                            }
+
+                            <li class="@(currentPage == "home-index" ? "active" : null)">
+                                @Html.ActionLink("Home", "Index", "Home")
+                            </li>
+
+                            <li  class="@(currentPage == "home-contact" ? "active" : null)">
+                                @Html.ActionLink("Contact", "Contact", "Account")
+                            </li>
+                            
+                            <li>
+                                <a href="http://blog.example.com">Blog</a>
+                            </li>
+
+                            @if (Request.IsAuthenticated)
+                            {
+                                <li  class="@(currentPage == "account-login" ? "active" : null)">
+                                    @Html.ActionLink("Log Out", "LogOff", "Account", null, new { @class = "btn-header" })
+                                </li>
+                            }
+                            else
+                            {
+                                <li  class="@(currentPage == "account-login" ? "active" : null)">
+                                    @Html.ActionLink("Log In", "LogOn", "Account", null, new { @class = "btn-header" })
+                                </li>    
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (currentAction == "WhatCanReminderHeroDo" || (currentAction.EndsWith("Reminders") && currentController == "Home"))
+        {
+            // hack....
+            <div id="body" style="margin-top:-20px">
+                @RenderBody()
+            </div>
+        }
+        else
+        {
+            <!-- ends navbar -->
+            <div id="body">
+                @RenderBody()
+            </div>
+        }
+  @*      <div class="footertwo">
+            @Html.Partial("FooterUserControl")
+        </div>*@
+
+    </div>
+
+     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+
+@*    <script src="../../Scripts/bootstrap.min.js"></script>*@
+        @MiniProfiler.RenderIncludes()
+    
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-1111111', 'example.com');
+        ga('send', 'pageview');
+
+    </script>
+
+</body>
+</html>

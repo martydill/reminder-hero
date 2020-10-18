@@ -1,0 +1,31 @@
+﻿@model ReminderHero.Web.Controllers.EndpointsViewModel
+
+
+@{
+    var actionName = "Add" + Model.ThingName.Replace(" ", "");
+}
+@if (!Model.CanAddMore)
+{
+    <div class="alert alert-error">
+        Sorry, your current price plan doesn't allow you to add another @Model.ThingName. <a href="/Account/PricePlan">Want to upgrade?</a>
+    </div>
+}
+    @using (Html.BeginForm(actionName, "Account", FormMethod.Post, new { id = "add-button", @class = "add-form" }))
+    {
+        <input type="text" name="new-endpoint-address" placeholder="Enter your @(Model.ThingName)"/>
+        if (!Model.CanAddMore)
+        { 
+            <input type="submit" value="Add @(Model.ThingName)" class="btn" disabled="disabled"/>
+        }
+        else
+        {
+            <input type="submit" value="Add @(Model.ThingName)" class="btn" />
+        }
+    }
+
+    @if (ViewData.ModelState["new-endpoint-address"] != null && ViewData.ModelState["new-endpoint-address"].Errors.Any())
+    {
+        <div class="alert alert-error">
+            @Html.ValidationSummary(false)
+        </div>
+    }

@@ -1,0 +1,72 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    var currentController = ViewContext.RouteData.Values["controller"] as string ?? "Home";
+    var currentAction = ViewContext.RouteData.Values["action"] as string ?? "Index";
+    var currentPage = (currentController + "-" + currentAction).ToLower();
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="well">
+                <ul class="nav nav-list">
+
+                      <li class="nav-header">My Reminders</li>
+
+                    <li class="@(currentPage == "account-surveys" ? "active" : null)">
+                        @Html.ActionLink("Upcoming Reminders", "Reminders")
+                    </li>
+                    <li class="@(currentPage == "account-reminderhistory" ? "active" : null)">
+                        @Html.ActionLink("Reminder History", "ReminderHistory")
+                    </li>
+                 
+                    <li class="@(currentPage == "account-reminderisettings" ? "active" : null)">
+                        @Html.ActionLink("Reminder Settings", "ReminderSettings")
+                    </li>
+                 
+                    <li class="nav-header">My Account</li>
+
+@*                    <li class="@(currentPage == "account-timezone" ? "active" : null)">
+                        @Html.ActionLink("My Timezone", "TimeZone")
+                    </li>*@
+
+                    <li class="@(currentPage == "account-settings" ? "active" : null)">
+                        @Html.ActionLink("My Email Addresses", "EmailAddresses")
+                    </li>
+
+                    <li class="@(currentPage == "account-settings" ? "active" : null)">
+                        @Html.ActionLink("My Phone Numbers", "PhoneNumbers")
+                    </li>
+
+                    <li class="@(currentPage == "account-priceplan" ? "active" : null)">
+                        @Html.ActionLink("Price Plan", "PricePlan")
+                    </li>
+
+                     <li class="@(currentPage == "account-googlecalendar" ? "active" : null)">
+                        @Html.ActionLink("Google Calendar", "GoogleCalendar")
+                    </li>
+
+                    <li class="@(currentPage == "account-billinghistory" ? "active" : null)">
+                        @Html.ActionLink("Billing History", "BillingHistory")
+                    </li>
+
+                    <li class="@(currentPage == "account-changepassword" ? "active" : null)">
+                        @Html.ActionLink("Change Password", "ChangePassword")
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="span9 account-details-content">
+            <h2>@ViewBag.Title</h2>
+
+            @RenderBody()
+        </div>
+        
+        <div class="span1"></div>
+    </div>
+</div>
